@@ -1,11 +1,11 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
   Param,
   Delete,
   Put,
+  Controller,
+  Get,
+  Post,
   ParseUUIDPipe,
   HttpCode,
   NotFoundException,
@@ -45,6 +45,13 @@ export class UserController {
     return user;
   }
 
+  @Delete(':id')
+  @HttpCode(204)
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    await this.findOne(id);
+    return this.userService.remove(id);
+  }
+
   @Put(':id')
   async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
@@ -60,12 +67,5 @@ export class UserController {
       });
 
     return this.userService.update(id, updateUserDto, user);
-  }
-
-  @Delete(':id')
-  @HttpCode(204)
-  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    await this.findOne(id);
-    return this.userService.remove(id);
   }
 }

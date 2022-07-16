@@ -7,10 +7,10 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  private db: Database<User>;
+  private database: Database<User>;
 
   constructor() {
-    this.db = new Database<User>(User);
+    this.database = new Database<User>(User);
   }
 
   async create(createUserDto: CreateUserDto) {
@@ -22,15 +22,19 @@ export class UserService {
       updatedAt: Date.now(),
     };
 
-    return this.db.create(data);
+    return this.database.create(data);
   }
 
   findAll() {
-    return this.db.findAll();
+    return this.database.findAll();
   }
 
   async findOne(id: string) {
-    return this.db.findOne(id);
+    return this.database.findOne(id);
+  }
+
+  async remove(id: string) {
+    return this.database.remove(id);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto, user: User) {
@@ -41,10 +45,6 @@ export class UserService {
       updatedAt: Date.now(),
     };
 
-    return this.db.update(id, data);
-  }
-
-  async remove(id: string) {
-    return this.db.remove(id);
+    return this.database.update(id, data);
   }
 }
