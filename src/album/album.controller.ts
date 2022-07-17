@@ -43,12 +43,6 @@ export class AlbumController {
     return this.albumService.findAll();
   }
 
-  @Delete(':id')
-  @HttpCode(204)
-  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    await this.findOne(id);
-  }
-
   @Put(':id')
   async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
@@ -56,5 +50,13 @@ export class AlbumController {
   ) {
     await this.findOne(id);
     return this.albumService.update(id, updateAlbumDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    await this.findOne(id);
+
+    return this.albumService.remove(id);
   }
 }

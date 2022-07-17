@@ -43,13 +43,6 @@ export class ArtistController {
     return artist;
   }
 
-  @Delete(':id')
-  @HttpCode(204)
-  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    await this.findOne(id);
-    // return this.artistService.remove(id);
-  }
-
   @Put(':id')
   async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
@@ -57,5 +50,12 @@ export class ArtistController {
   ) {
     await this.findOne(id);
     return this.artistService.update(id, updateArtistDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    await this.findOne(id);
+    return this.artistService.remove(id);
   }
 }

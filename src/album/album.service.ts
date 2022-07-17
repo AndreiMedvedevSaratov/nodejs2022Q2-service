@@ -5,6 +5,8 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { Database } from './../database/database';
+import { FavoritesService } from 'src/favorites/favorites.service';
+import { TrackService } from 'src/track/track.service';
 
 @Injectable()
 export class AlbumService {
@@ -13,6 +15,10 @@ export class AlbumService {
   constructor(
     @Inject(forwardRef(() => ArtistService))
     private artistService: ArtistService,
+    @Inject(forwardRef(() => TrackService))
+    private trackService: TrackService,
+    @Inject(forwardRef(() => FavoritesService))
+    private favoritesService: FavoritesService,
   ) {
     AlbumService.database = new Database<Album>(Album);
   }
@@ -43,5 +49,18 @@ export class AlbumService {
     };
 
     return AlbumService.database.update(id, data);
+  }
+
+  async remove(id: string) {
+    const tracks = await this.trackService.findAll();
+
+    for (const track of tracks) {
+      if (track.albumId !== id) continue;
+
+      this.trackService.update(track.id, { ...track, albumId: null });
+    }
+
+    this.favoritesService.removeAlbumToFavourites(id);
+    return AlbumService.database.remove(id);
   }
 }
