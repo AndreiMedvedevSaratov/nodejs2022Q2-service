@@ -6,6 +6,7 @@ import { ArtistService } from 'src/artist/artist.service';
 import { v4 } from 'uuid';
 import { Track } from './entities/track.entity';
 import { Database } from './../database/database';
+import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class TrackService {
@@ -16,6 +17,8 @@ export class TrackService {
     private artistService: ArtistService,
     @Inject(forwardRef(() => AlbumService))
     private albumService: AlbumService,
+    @Inject(forwardRef(() => FavoritesService))
+    private favoritesService: FavoritesService,
   ) {
     TrackService.database = new Database<Track>(Track);
   }
@@ -46,5 +49,9 @@ export class TrackService {
     };
 
     return TrackService.database.update(id, data);
+  }
+  async remove(id: string) {
+    this.favoritesService.removeTrackToFavourites(id);
+    return TrackService.database.remove(id);
   }
 }

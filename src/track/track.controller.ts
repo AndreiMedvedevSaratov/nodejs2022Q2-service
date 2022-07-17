@@ -57,5 +57,6 @@ export class TrackController {
   @HttpCode(204)
   async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     await this.findOne(id);
+    return this.trackService.remove(id);
   }
 }
