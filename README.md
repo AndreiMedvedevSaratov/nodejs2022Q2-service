@@ -1,5 +1,30 @@
 # Home Library Service
 
+## Docker Compose
+
+- Docker Hub - [nodejs2022q2-service_api](https://hub.docker.com/r/andreimedvedevsaratov/nodejs2022q2-service_api)
+(Unfortunately I wasn't able to push it to Docker Hub account)
+
+```
+docker compose -f "docker-compose.yml" up --build
+```
+
+## Dockerfile `build` and `run`
+
+Build `Dockerfile` for `API`
+
+```
+docker build --pull --rm -f "Dockerfile" -t nodejs2022q2service_api:latest "." 
+docker run --env-file .env --rm -it -p 4000:4000/tcp nodejs2022q2service_api:latest
+```
+
+Build `Dockerfile` for `Database`
+
+```
+docker build --pull --rm -f "database/dockerfile" -t nodejs2022q2service_database:latest "." 
+docker run --env-file .env --rm -it -p 5432:5432/tcp nodejs2022q2service_database:latest
+```
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
@@ -9,6 +34,8 @@
 
 ```
 git clone {repository URL}
+cd nodejs2022Q2-service
+git checkout dev
 ```
 
 ## Installing NPM modules
